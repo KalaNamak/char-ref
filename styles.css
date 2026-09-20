@@ -1,0 +1,248 @@
+/* ==========================================================================
+   Character Reference Builder — styles
+   Colour, type and spacing are set as CSS variables in :root below, so
+   changing the look (a different font, a different accent colour) is
+   usually a one-line change up here rather than hunting through the file.
+   ========================================================================== */
+
+:root {
+  /* ---- colour palette (light mode) ---- */
+  --bg: #F1EEE4;         /* page background */
+  --surface: #FFFFFF;    /* cards, inputs */
+  --ink: #1E2621;        /* body text */
+  --muted: #6B6357;      /* secondary text */
+  --accent: #2F4B3C;     /* buttons, active states */
+  --accent-ink: #FFFFFF; /* text on top of --accent */
+  --brass: #9C7A3C;      /* unused accent, free to use */
+  --border: #DAD2BE;
+  --danger: #8C3B2E;
+
+  /* ---- the "paper" the letter is rendered on ---- */
+  --paper: #FBF8F1;
+  --paper-line: #E4DDC8;
+}
+
+/* ---- dark mode: respects the visitor's OS setting ---- */
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg: #14181A;
+    --surface: #1C2220;
+    --ink: #ECE8DE;
+    --muted: #A6A08F;
+    --accent: #7FAE93;
+    --accent-ink: #0F1512;
+    --brass: #C7A15C;
+    --border: #333B35;
+    --danger: #E28A79;
+  }
+}
+/* Force dark mode regardless of OS setting by adding data-theme="dark"
+   to the <html> tag; force light mode with data-theme="light". */
+:root[data-theme="dark"] {
+  --bg: #14181A;
+  --surface: #1C2220;
+  --ink: #ECE8DE;
+  --muted: #A6A08F;
+  --accent: #7FAE93;
+  --accent-ink: #0F1512;
+  --brass: #C7A15C;
+  --border: #333B35;
+  --danger: #E28A79;
+}
+
+* { box-sizing: border-box; }
+
+html, body {
+  height: 100%;
+  margin: 0;
+  background: var(--bg);
+  color: var(--ink);
+  /* UI font. Swap the family name here (and in the Google Fonts <link>
+     in index.html) to change the interface typeface. */
+  font-family: 'Inter', ui-sans-serif, system-ui, -apple-system, sans-serif;
+  -webkit-font-smoothing: antialiased;
+}
+a { color: inherit; }
+
+.shell {
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 40px 28px 80px;
+}
+
+header.top {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 24px;
+  margin-bottom: 36px;
+  padding-bottom: 20px;
+  border-bottom: 1px solid var(--border);
+}
+.brand { display: flex; align-items: center; gap: 14px; }
+.brand-mark {
+  width: 42px;
+  height: 42px;
+  border-radius: 50%;
+  background: var(--accent);
+  color: var(--accent-ink);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: 'Source Serif 4', serif;
+  font-weight: 600;
+  font-size: 19px;
+  flex: none;
+}
+h1 { font-size: 1.5rem; margin: 0; letter-spacing: -0.01em; font-weight: 700; }
+.brand p { margin: 2px 0 0; color: var(--muted); font-size: 0.9rem; }
+.top-note { color: var(--muted); font-size: 0.85rem; max-width: 260px; text-align: right; line-height: 1.5; }
+
+.layout {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: 32px;
+}
+@media (min-width: 980px) {
+  .layout { grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); align-items: start; }
+  .preview-col { position: sticky; top: 24px; }
+}
+
+section.card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 24px;
+  margin-bottom: 20px;
+}
+section.card h2 { font-size: 1.02rem; margin: 0 0 4px; font-weight: 600; }
+section.card .hint { color: var(--muted); font-size: 0.85rem; margin: 0 0 18px; line-height: 1.5; }
+
+/* ---- form fields ----
+   To add a new field to the form: copy a `.field` block in index.html,
+   give the input a new id, then in app.js: add the key to `state`,
+   bind it in `simpleFields` (or add a custom listener), add a line to
+   `renderPreview()`, and add a line to `buildPdfBlob()`. */
+.field-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+.field { display: flex; flex-direction: column; gap: 6px; }
+.field.full { grid-column: 1 / -1; }
+@media (max-width: 560px) { .field-grid { grid-template-columns: 1fr; } }
+
+label { font-size: 0.82rem; font-weight: 500; color: var(--ink); }
+label .opt { color: var(--muted); font-weight: 400; }
+input[type=text], input[type=email], input[type=tel], input[type=date], textarea {
+  font-family: 'Inter', sans-serif;
+  font-size: 0.95rem;
+  padding: 10px 12px;
+  border-radius: 7px;
+  border: 1px solid var(--border);
+  background: var(--bg);
+  color: var(--ink);
+  width: 100%;
+  resize: vertical;
+}
+textarea { min-height: 64px; line-height: 1.5; }
+input:focus, textarea:focus { outline: 2px solid var(--accent); outline-offset: 1px; border-color: transparent; }
+.field.error input, .field.error textarea { border-color: var(--danger); }
+.field-error-msg { font-size: 0.78rem; color: var(--danger); display: none; }
+.field.error .field-error-msg { display: block; }
+
+.paragraphs { display: flex; flex-direction: column; gap: 12px; }
+.paragraph-row { display: flex; gap: 8px; align-items: flex-start; }
+.paragraph-row textarea { min-height: 84px; flex: 1; }
+.p-remove {
+  flex: none; width: 34px; height: 34px; border-radius: 7px;
+  border: 1px solid var(--border); background: var(--bg); color: var(--muted);
+  cursor: pointer; font-size: 1rem; line-height: 1;
+}
+.p-remove:hover { color: var(--danger); border-color: var(--danger); }
+.p-remove:disabled { opacity: 0.35; cursor: not-allowed; }
+
+.add-para {
+  align-self: flex-start; margin-top: 4px; background: none;
+  border: 1px dashed var(--border); color: var(--accent); border-radius: 7px;
+  padding: 9px 14px; font-size: 0.87rem; font-weight: 500; cursor: pointer; font-family: inherit;
+}
+.add-para:hover { border-color: var(--accent); }
+
+/* ---- signature ---- */
+.sig-tabs { display: flex; gap: 6px; margin-bottom: 12px; }
+.sig-tab {
+  padding: 7px 14px; border-radius: 7px; border: 1px solid var(--border);
+  background: var(--bg); color: var(--muted); font-size: 0.84rem; cursor: pointer;
+  font-family: inherit; font-weight: 500;
+}
+.sig-tab.active { background: var(--accent); color: var(--accent-ink); border-color: var(--accent); }
+.sig-pane { display: none; }
+.sig-pane.active { display: block; }
+
+#sigCanvas {
+  width: 100%; height: 150px; display: block;
+  border: 1px solid var(--border); border-radius: 7px; background: var(--surface);
+  touch-action: none; cursor: crosshair;
+}
+.sig-row { display: flex; justify-content: space-between; align-items: center; margin-top: 8px; }
+.sig-row .muted-note { font-size: 0.78rem; color: var(--muted); }
+.clear-btn { background: none; border: none; color: var(--muted); font-size: 0.82rem; cursor: pointer; text-decoration: underline; font-family: inherit; }
+.clear-btn:hover { color: var(--danger); }
+
+#typedSig {
+  width: 100%; padding: 16px 14px; border: 1px solid var(--border); border-radius: 7px;
+  background: var(--surface);
+  /* Signature-style font for the "type" option. Swap this family (and the
+     Google Fonts <link> in index.html) for a different handwriting style. */
+  font-family: 'Dancing Script', cursive;
+  font-size: 2rem;
+  color: var(--ink);
+}
+
+/* ---- generate bar ---- */
+.generate-bar {
+  position: sticky; bottom: 0; background: var(--surface); border: 1px solid var(--border);
+  border-radius: 10px; padding: 16px 20px; display: flex; align-items: center;
+  justify-content: space-between; gap: 16px; flex-wrap: wrap;
+}
+.generate-bar .status { font-size: 0.83rem; color: var(--muted); line-height: 1.4; }
+.generate-bar .status.warn { color: var(--danger); }
+button.primary {
+  background: var(--accent); color: var(--accent-ink); border: none; border-radius: 8px;
+  padding: 13px 22px; font-size: 0.95rem; font-weight: 600; cursor: pointer;
+  font-family: inherit; white-space: nowrap;
+}
+button.primary:disabled { opacity: 0.4; cursor: not-allowed; }
+button.primary:not(:disabled):hover { filter: brightness(1.08); }
+
+/* ---- letter preview ----
+   This visually mirrors the PDF layout produced in app.js (buildPdfBlob).
+   If you change the wording/order of the letter in one place, change it
+   in the other too so the preview stays accurate. */
+.paper-wrap {
+  background: var(--paper);
+  border: 1px solid var(--border);
+  border-radius: 4px;
+  box-shadow: 0 18px 40px -20px rgba(20, 20, 10, 0.35);
+  padding: 46px 42px;
+  /* Letter/document font. Swap this (and the Google Fonts <link> in
+     index.html) to change the typeface the reference is displayed and
+     printed in. Update the matching `doc.setFont(...)` calls in
+     app.js's buildPdfBlob() too — jsPDF only ships Helvetica/Times/Courier
+     natively, so a custom font needs to be embedded as a base64 .ttf if
+     you want the exact same face in the PDF (see jsPDF's docs). */
+  font-family: 'Source Serif 4', Georgia, 'Times New Roman', serif;
+  color: #262019;
+  font-size: 0.92rem;
+  line-height: 1.7;
+  min-height: 520px;
+  overflow-wrap: anywhere;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) .paper-wrap { box-shadow: 0 18px 40px -18px rgba(0,0,0,0.6); }
+}
+.paper-wrap .block { margin: 0 0 4px; white-space: pre-wrap; }
+.paper-wrap .spacer { height: 18px; }
+.paper-wrap .re-line { font-weight: 600; margin: 4px 0 18px; }
+.paper-wrap .body-para { margin: 0 0 16px; white-space: pre-wrap; }
+.paper-wrap .sig-img { display: block; max-width: 190px; max-height: 70px; margin: 4px 0 10px; }
+.paper-wrap .typed-sig-preview { font-family: 'Dancing Script', cursive; font-size: 1.9rem; margin: 4px 0 6px; color: #262019; }
+.paper-wrap .placeholder { color: #A79E8C; font-style: italic; }
+.preview-label { font-size: 0.78rem; color: var(--muted); margin: 0 0 10px; font-weight: 500; }
