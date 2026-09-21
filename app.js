@@ -30,6 +30,7 @@
   const state = {
     name: "", address: "", phone: "", email: "", date: "",
     relationship: "", defendant: "", court: "", charge: "", caseNumber: "",
+    profession: "", yearsKnown: "",
     paragraphs: [""],
     sigMode: "draw",
     typedSig: "",
@@ -41,7 +42,7 @@
   state.date = todayISO;
 
   // ---------- simple field bindings ----------
-  const simpleFields = ["name", "address", "phone", "email", "date", "relationship", "defendant", "court", "charge"];
+  const simpleFields = ["name", "address", "phone", "email", "date", "relationship", "defendant", "court", "charge", "profession", "yearsKnown"];
   simpleFields.forEach(key => {
     const el = document.getElementById("f-" + key);
     el.addEventListener("input", () => {
@@ -212,6 +213,9 @@
   function placeholderOr(val, ph) {
     return val && val.trim() ? esc(val) : '<span class="placeholder">' + esc(ph) + "</span>";
   }
+  function firstName(full) {
+    return (full || "").trim().split(/\s+/)[0] || "";
+  }
 
   // ---------- live preview ----------
   const paperPreview = document.getElementById("paperPreview");
@@ -240,12 +244,20 @@
     html += `<div class="spacer"></div>`;
     html += `<div class="re-line">Re: Character Reference for ${placeholderOr(s.defendant, "defendant's name")} – Charge: ${placeholderOr(s.charge, "charge")} – Case No: ${placeholderOr(s.caseNumber, "case number")}</div>`;
 
-    html += `<div class="block">Dear Sir/Madam,</div>`;
+    html += `<div class="block">Your Honour,</div>`;
     html += `<div class="spacer"></div>`;
 
+    const refFirstText = s.name.trim() ? esc(firstName(s.name)) : "[your first name]";
+    const defFirstText = s.defendant.trim() ? esc(firstName(s.defendant)) : "[defendant's first name]";
+    const defFullText = placeholderOr(s.defendant, "defendant's name");
     const relText = s.relationship.trim() ? esc(s.relationship.trim()) : "[relationship]";
-    const defText = s.defendant.trim() ? esc(s.defendant.trim()) : "[defendant's name]";
-    html += `<div class="body-para">I am writing this letter as a character reference for ${defText}. I am ${defText}'s ${relText}.</div>`;
+    const profText = placeholderOr(s.profession, "profession");
+    const yearsText = String(s.yearsKnown || "").trim() ? esc(String(s.yearsKnown).trim()) : "[number of]";
+    const caseNoText = placeholderOr(s.caseNumber, "case number");
+
+    html += `<div class="body-para">My name is ${refFirstText}, I am a ${profText} and ${defFullText}'s ${relText}. I have known ${defFirstText} for ${yearsText} years.</div>`;
+    html += `<div class="body-para">I am aware that ${defFirstText} is currently before the court in relation to the above named charge, ${caseNoText}.</div>`;
+    html += `<div class="body-para">I am writing this letter voluntarily to express my support and to share my personal perspective on ${defFirstText}'s character.</div>`;
 
     const nonEmptyParas = s.paragraphs.filter(p => p.trim());
     if (nonEmptyParas.length) {
@@ -276,7 +288,7 @@
   renderPreview();
 
   // ---------- validation ----------
-  const requiredFields = ["name", "address", "date", "relationship", "defendant", "court", "charge", "caseNumber"];
+  const requiredFields = ["name", "address", "date", "relationship", "defendant", "court", "charge", "caseNumber", "profession", "yearsKnown"];
   const genStatus = document.getElementById("genStatus");
   const generateBtn = document.getElementById("generateBtn");
 
@@ -312,7 +324,8 @@
   const fieldLabels = {
     name: "your name", address: "your address", date: "the date",
     relationship: "your relationship to the defendant", defendant: "the defendant's name",
-    court: "the name of the court", charge: "the charge", caseNumber: "the case number"
+    court: "the name of the court", charge: "the charge", caseNumber: "the case number",
+    profession: "your profession", yearsKnown: "how many years you've known the defendant"
   };
   function humanList(keys) {
     const labels = keys.map(k => fieldLabels[k] || k);
@@ -417,10 +430,18 @@
     doc.setFont("times", "normal");
     space();
 
-    line("Dear Sir/Madam,");
+    line("Your Honour,");
     space();
 
-    wrapped("I am writing this letter as a character reference for " + s.defendant.trim() + ". I am " + s.defendant.trim() + "'s " + s.relationship.trim() + ".");
+    const refFirst = firstName(s.name);
+    const defFirst = firstName(s.defendant);
+    const yearsVal = String(s.yearsKnown || "").trim();
+
+    wrapped("My name is " + refFirst + ", I am a " + s.profession.trim() + " and " + s.defendant.trim() + "'s " + s.relationship.trim() + ". I have known " + defFirst + " for " + yearsVal + " years.");
+    space();
+    wrapped("I am aware that " + defFirst + " is currently before the court in relation to the above named charge, " + s.caseNumber.trim() + ".");
+    space();
+    wrapped("I am writing this letter voluntarily to express my support and to share my personal perspective on " + defFirst + "'s character.");
     space();
 
     s.paragraphs.forEach(p => {
