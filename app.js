@@ -544,7 +544,9 @@
         defFirst +
         " is currently before the court in relation to the above named charge, " +
         s.caseNumber.trim() +
-        ". I am writing this letter voluntarily to express my support and to share my personal perspective on " +
+        ", and that " +
+        defFirst +
+        " has entered a plea of not guilty. I am writing this letter voluntarily to express my support and to share my personal perspective on " +
         defFirst +
         "'s character.",
     );
