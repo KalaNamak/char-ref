@@ -290,7 +290,7 @@
     html += `<div class="block">${placeholderOr(s.court, "Name of court")}</div>`;
 
     html += `<div class="spacer"></div>`;
-    html += `<div class="re-line">Re: Character Reference for ${placeholderOr(s.defendant, "defendant's name")} – Charge: ${placeholderOr(s.charge, "charge")} – Case No: ${placeholderOr(s.caseNumber, "case number")}</div>`;
+    html += `<div class="re-line">Re: Character Reference for ${placeholderOr(s.defendant, "defendant's name")} <br>Charge: ${placeholderOr(s.charge, "charge")}<br>Case No: ${placeholderOr(s.caseNumber, "case number")}</div>`;
 
     html += `<div class="block">Your Honour,</div>`;
     html += `<div class="spacer"></div>`;

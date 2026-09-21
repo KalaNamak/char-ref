@@ -1,148 +1,157 @@
 <!DOCTYPE html>
 <html lang="en-GB">
+
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Character Reference Builder</title>
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,600;1,8..60,400&family=Inter:wght@400;500;600;700&family=Dancing+Script:wght@500;700&display=swap" rel="stylesheet">
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
-<link rel="stylesheet" href="styles.css">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Character Reference Builder</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,600;1,8..60,400&family=Inter:wght@400;500;600;700&family=Dancing+Script:wght@500;700&display=swap"
+    rel="stylesheet">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+  <link rel="stylesheet" href="styles.css">
 </head>
+
 <body>
-<div class="shell">
+  <div class="shell">
 
-  <header class="top">
-    <div class="brand">
-      <div class="brand-mark">§</div>
-      <div>
-        <h1>Character Reference Builder</h1>
-        <p>For submission to a Crown Court in England and Wales</p>
+    <header class="top">
+      <div class="brand">
+        <div class="brand-mark">§</div>
+        <div>
+          <h1>Character Reference Builder</h1>
+          <p>For submission to a Crown Court in England and Wales</p>
+        </div>
       </div>
-    </div>
-    <p class="top-note">Fill in the details on the left. The letter on the right updates as you go, and you can download it as a PDF once it's complete.</p>
-  </header>
+      <p class="top-note">Fill in the details on the left. The letter on the right updates as you go, and you can
+        download it as a PDF once it's complete.</p>
+    </header>
 
-  <div class="layout">
+    <div class="layout">
 
-    <!-- FORM COLUMN -->
-    <div class="form-col">
+      <!-- FORM COLUMN -->
+      <div class="form-col">
 
-      <section class="card">
-        <h2>Your details</h2>
-        <p class="hint">This is you — the person writing the reference. Your name and address will appear at the top of the letter, as is standard for a formal letter to the court.</p>
-        <div class="field-grid">
-          <div class="field full" data-field="name">
-            <label for="f-name">Full name</label>
-            <input type="text" id="f-name" placeholder="e.g. Margaret Ellison">
-            <span class="field-error-msg">Please enter your name.</span>
+        <section class="card">
+          <h2>Your details</h2>
+          <p class="hint">This is you — the person writing the reference. Your name and address will appear at the top
+            of the letter, as is standard for a formal letter to the court.</p>
+          <div class="field-grid">
+            <div class="field full" data-field="name">
+              <label for="f-name">Full name</label>
+              <input type="text" id="f-name" placeholder="e.g. Margaret Ellison">
+              <span class="field-error-msg">Please enter your name.</span>
+            </div>
+            <div class="field full" data-field="address">
+              <label for="f-address">Address</label>
+              <textarea id="f-address" rows="3" placeholder="12 Weston Road&#10;Nottingham&#10;NG7 2RD"></textarea>
+              <span class="field-error-msg">Please enter your address.</span>
+            </div>
+            <div class="field" data-field="phone">
+              <label for="f-phone">Phone number <span class="opt">(optional)</span></label>
+              <input type="tel" id="f-phone" placeholder="07XXX XXXXXX">
+            </div>
+            <div class="field" data-field="email">
+              <label for="f-email">Email address <span class="opt">(optional)</span></label>
+              <input type="email" id="f-email" placeholder="you@example.com">
+            </div>
+            <div class="field" data-field="date">
+              <label for="f-date">Date</label>
+              <input type="date" id="f-date">
+              <span class="field-error-msg">Please choose a date.</span>
+            </div>
+            <div class="field" data-field="relationship">
+              <label for="f-relationship">Your relationship to the defendant</label>
+              <input type="text" id="f-relationship" placeholder="e.g. employer, close friend, neighbour">
+              <span class="field-error-msg">Please describe your relationship to the defendant.</span>
+            </div>
+            <div class="field" data-field="profession">
+              <label for="f-profession">Your profession</label>
+              <input type="text" id="f-profession" placeholder="e.g. secondary school teacher">
+              <span class="field-error-msg">Please enter your profession.</span>
+            </div>
+            <div class="field" data-field="yearsKnown">
+              <label for="f-yearsKnown">Years known to the defendant</label>
+              <input type="number" id="f-yearsKnown" min="0" step="1" placeholder="e.g. 8">
+              <span class="field-error-msg">Please enter how many years you've known the defendant.</span>
+            </div>
           </div>
-          <div class="field full" data-field="address">
-            <label for="f-address">Address</label>
-            <textarea id="f-address" rows="3" placeholder="12 Weston Road&#10;Nottingham&#10;NG7 2RD"></textarea>
-            <span class="field-error-msg">Please enter your address.</span>
-          </div>
-          <div class="field" data-field="phone">
-            <label for="f-phone">Phone number <span class="opt">(optional)</span></label>
-            <input type="tel" id="f-phone" placeholder="07XXX XXXXXX">
-          </div>
-          <div class="field" data-field="email">
-            <label for="f-email">Email address <span class="opt">(optional)</span></label>
-            <input type="email" id="f-email" placeholder="you@example.com">
-          </div>
-          <div class="field" data-field="date">
-            <label for="f-date">Date</label>
-            <input type="date" id="f-date">
-            <span class="field-error-msg">Please choose a date.</span>
-          </div>
-          <div class="field" data-field="relationship">
-            <label for="f-relationship">Your relationship to the defendant</label>
-            <input type="text" id="f-relationship" placeholder="e.g. employer, close friend, neighbour">
-            <span class="field-error-msg">Please describe your relationship to the defendant.</span>
-          </div>
-          <div class="field" data-field="profession">
-            <label for="f-profession">Your profession</label>
-            <input type="text" id="f-profession" placeholder="e.g. secondary school teacher">
-            <span class="field-error-msg">Please enter your profession.</span>
-          </div>
-          <div class="field" data-field="yearsKnown">
-            <label for="f-yearsKnown">Years known to the defendant</label>
-            <input type="number" id="f-yearsKnown" min="0" step="1" placeholder="e.g. 8">
-            <span class="field-error-msg">Please enter how many years you've known the defendant.</span>
-          </div>
-        </div>
-      </section>
+        </section>
 
-      <section class="card">
-        <h2>Case details</h2>
-        <p class="hint">These identify the defendant and the case, so the court can match your letter to the right proceedings.</p>
-        <div class="field-grid">
-          <div class="field" data-field="defendant">
-            <label for="f-defendant">Name of defendant</label>
-            <input type="text" id="f-defendant" placeholder="e.g. Thomas Ellison">
-            <span class="field-error-msg">Please enter the defendant's name.</span>
+        <section class="card">
+          <h2>Case details</h2>
+          <p class="hint">These identify the defendant and the case, so the court can match your letter to the right
+            proceedings.</p>
+          <div class="field-grid">
+            <div class="field" data-field="defendant">
+              <label for="f-defendant">Name of defendant</label>
+              <input type="text" id="f-defendant" placeholder="e.g. Thomas Ellison">
+              <span class="field-error-msg">Please enter the defendant's name.</span>
+            </div>
+            <div class="field" data-field="court">
+              <label for="f-court">Name of court</label>
+              <input type="text" id="f-court" placeholder="e.g. Nottingham Crown Court">
+              <span class="field-error-msg">Please enter the name of the court.</span>
+            </div>
+            <div class="field full" data-field="charge">
+              <label for="f-charge">Charge</label>
+              <textarea id="f-charge" rows="2" placeholder="e.g. Assault occasioning actual bodily harm"></textarea>
+              <span class="field-error-msg">Please describe the charge.</span>
+            </div>
+            <div class="field full" data-field="caseNumber">
+              <label for="f-case">Case number</label>
+              <input type="text" id="f-case" placeholder="e.g. T20260123">
+              <span class="field-error-msg">Please enter the case number.</span>
+            </div>
           </div>
-          <div class="field" data-field="court">
-            <label for="f-court">Name of court</label>
-            <input type="text" id="f-court" placeholder="e.g. Nottingham Crown Court">
-            <span class="field-error-msg">Please enter the name of the court.</span>
+        </section>
+
+        <section class="card">
+          <h2>The reference itself</h2>
+          <p class="hint">Write in your own words. Courts value specific, honest detail, examples of their character,
+            and how the offence sits against what you know of them. Each box becomes one paragraph.</p>
+          <div class="paragraphs" id="paragraphList"></div>
+          <button class="add-para" id="addPara" type="button">+ Add another paragraph</button>
+        </section>
+
+        <section class="card">
+          <h2>Signature</h2>
+          <p class="hint">Sign using your mouse, finger or stylus, or type your name in a signature style instead.</p>
+          <div class="sig-tabs">
+            <button class="sig-tab active" data-mode="draw" type="button">Draw</button>
+            <button class="sig-tab" data-mode="type" type="button">Type</button>
           </div>
-          <div class="field full" data-field="charge">
-            <label for="f-charge">Charge</label>
-            <textarea id="f-charge" rows="2" placeholder="e.g. Assault occasioning actual bodily harm"></textarea>
-            <span class="field-error-msg">Please describe the charge.</span>
+          <div class="sig-pane active" data-pane="draw">
+            <canvas id="sigCanvas"></canvas>
+            <div class="sig-row">
+              <span class="muted-note">Draw your signature above</span>
+              <button class="clear-btn" id="clearSig" type="button">Clear</button>
+            </div>
           </div>
-          <div class="field full" data-field="caseNumber">
-            <label for="f-case">Case number</label>
-            <input type="text" id="f-case" placeholder="e.g. T20260123">
-            <span class="field-error-msg">Please enter the case number.</span>
+          <div class="sig-pane" data-pane="type">
+            <input type="text" id="typedSig" placeholder="Your name">
           </div>
-        </div>
-      </section>
+        </section>
 
-      <section class="card">
-        <h2>The reference itself</h2>
-        <p class="hint">Write in your own words. Courts value specific, honest detail — how long you've known the defendant, examples of their character, and how the offence sits against what you know of them. Each box becomes one paragraph.</p>
-        <div class="paragraphs" id="paragraphList"></div>
-        <button class="add-para" id="addPara" type="button">+ Add another paragraph</button>
-      </section>
-
-      <section class="card">
-        <h2>Signature</h2>
-        <p class="hint">Sign using your mouse, finger or stylus, or type your name in a signature style instead.</p>
-        <div class="sig-tabs">
-          <button class="sig-tab active" data-mode="draw" type="button">Draw</button>
-          <button class="sig-tab" data-mode="type" type="button">Type</button>
-        </div>
-        <div class="sig-pane active" data-pane="draw">
-          <canvas id="sigCanvas"></canvas>
-          <div class="sig-row">
-            <span class="muted-note">Draw your signature above</span>
-            <button class="clear-btn" id="clearSig" type="button">Clear</button>
-          </div>
-        </div>
-        <div class="sig-pane" data-pane="type">
-          <input type="text" id="typedSig" placeholder="Your name">
-        </div>
-      </section>
-
-    </div>
-
-    <!-- PREVIEW COLUMN -->
-    <div class="preview-col">
-      <p class="preview-label">Live preview</p>
-      <div class="paper-wrap" id="paperPreview"></div>
-
-      <div class="generate-bar" style="margin-top:20px;">
-        <div class="status" id="genStatus">Fill in the required fields to enable the download.</div>
-        <button class="primary" id="generateBtn" disabled type="button">Download PDF</button>
       </div>
-    </div>
 
+      <!-- PREVIEW COLUMN -->
+      <div class="preview-col">
+        <p class="preview-label">Live preview</p>
+        <div class="paper-wrap" id="paperPreview"></div>
+
+        <div class="generate-bar" style="margin-top:20px;">
+          <div class="status" id="genStatus">Fill in the required fields to enable the download.</div>
+          <button class="primary" id="generateBtn" disabled type="button">Download PDF</button>
+        </div>
+      </div>
+
+    </div>
   </div>
-</div>
 
-<script src="app.js"></script>
+  <script src="app.js"></script>
 </body>
+
 </html>
