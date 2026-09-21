@@ -29,7 +29,7 @@
   // ---------- state ----------
   const state = {
     name: "", address: "", phone: "", email: "", date: "",
-    relationship: "", defendant: "", court: "", caseNumber: "",
+    relationship: "", defendant: "", court: "", charge: "", caseNumber: "",
     paragraphs: [""],
     sigMode: "draw",
     typedSig: "",
@@ -41,7 +41,7 @@
   state.date = todayISO;
 
   // ---------- simple field bindings ----------
-  const simpleFields = ["name", "address", "phone", "email", "date", "relationship", "defendant", "court"];
+  const simpleFields = ["name", "address", "phone", "email", "date", "relationship", "defendant", "court", "charge"];
   simpleFields.forEach(key => {
     const el = document.getElementById("f-" + key);
     el.addEventListener("input", () => {
@@ -238,7 +238,7 @@
     html += `<div class="block">${placeholderOr(s.court, "Name of court")}</div>`;
 
     html += `<div class="spacer"></div>`;
-    html += `<div class="re-line">Re: Character Reference for ${placeholderOr(s.defendant, "defendant's name")} – Case No: ${placeholderOr(s.caseNumber, "case number")}</div>`;
+    html += `<div class="re-line">Re: Character Reference for ${placeholderOr(s.defendant, "defendant's name")} – Charge: ${placeholderOr(s.charge, "charge")} – Case No: ${placeholderOr(s.caseNumber, "case number")}</div>`;
 
     html += `<div class="block">Dear Sir/Madam,</div>`;
     html += `<div class="spacer"></div>`;
@@ -276,7 +276,7 @@
   renderPreview();
 
   // ---------- validation ----------
-  const requiredFields = ["name", "address", "date", "relationship", "defendant", "court", "caseNumber"];
+  const requiredFields = ["name", "address", "date", "relationship", "defendant", "court", "charge", "caseNumber"];
   const genStatus = document.getElementById("genStatus");
   const generateBtn = document.getElementById("generateBtn");
 
@@ -312,7 +312,7 @@
   const fieldLabels = {
     name: "your name", address: "your address", date: "the date",
     relationship: "your relationship to the defendant", defendant: "the defendant's name",
-    court: "the name of the court", caseNumber: "the case number"
+    court: "the name of the court", charge: "the charge", caseNumber: "the case number"
   };
   function humanList(keys) {
     const labels = keys.map(k => fieldLabels[k] || k);
@@ -413,7 +413,7 @@
     space();
 
     doc.setFont("times", "bold");
-    wrapped("Re: Character Reference for " + s.defendant.trim() + " \u2013 Case No: " + s.caseNumber.trim());
+    wrapped("Re: Character Reference for " + s.defendant.trim() + " \u2013 Charge: " + s.charge.trim() + " \u2013 Case No: " + s.caseNumber.trim());
     doc.setFont("times", "normal");
     space();
 
