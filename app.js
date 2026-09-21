@@ -93,7 +93,7 @@
       ta.value = val;
       ta.placeholder =
         i === 0
-          ? "How long have you known the defendant, and in what context?"
+          ? "Some good things about the defendant's character"
           : "Add another point — specific examples carry the most weight.";
       ta.addEventListener("input", () => {
         state.paragraphs[i] = ta.value;
@@ -290,7 +290,7 @@
     html += `<div class="block">${placeholderOr(s.court, "Name of court")}</div>`;
 
     html += `<div class="spacer"></div>`;
-    html += `<div class="re-line">Re: Character Reference for ${placeholderOr(s.defendant, "defendant's name")} <br>Charge: ${placeholderOr(s.charge, "charge")}<br>Case No: ${placeholderOr(s.caseNumber, "case number")}</div>`;
+    html += `<div class="re-line">Re: Character Reference for ${placeholderOr(s.defendant, "defendant's name")}<br>Charge: ${placeholderOr(s.charge, "charge")}<br>Case No: ${placeholderOr(s.caseNumber, "case number")}</div>`;
 
     html += `<div class="block">Your Honour,</div>`;
     html += `<div class="spacer"></div>`;
@@ -311,7 +311,7 @@
       : "[number of]";
     const caseNoText = placeholderOr(s.caseNumber, "case number");
 
-    html += `<div class="body-para">My name is ${refFirstText}, I am a ${profText} and ${defFullText}'s ${relText}. I have known ${defFirstText} for ${yearsText} years. <br> I am aware that ${defFirstText} is currently before the court in relation to the above named charge, case number ${caseNoText}. <br> I am writing this letter voluntarily to express my support and to share my personal perspective on ${defFirstText}'s character.</div>`;
+    html += `<div class="body-para">My name is ${refFirstText}, I am a ${profText} and ${defFullText}'s ${relText}. I have known ${defFirstText} for ${yearsText} years.<br>I am aware that ${defFirstText} is currently before the court in relation to the above named charge, case number ${caseNoText}.<br>I am writing this letter voluntarily to express my support and to share my personal perspective on ${defFirstText}'s character.</div>`;
 
     const nonEmptyParas = s.paragraphs.filter((p) => p.trim());
     if (nonEmptyParas.length) {
@@ -513,14 +513,10 @@
     space();
 
     doc.setFont("times", "bold");
-    wrapped(
-      "Re: Character Reference for " +
-        s.defendant.trim() +
-        " \u2013 Charge: " +
-        s.charge.trim() +
-        " \u2013 Case No: " +
-        s.caseNumber.trim(),
-    );
+    line("Re: Character Reference for " + s.defendant.trim());
+    line("Charge: " + s.charge.trim());
+    line("Case No: " + s.caseNumber.trim());
+
     doc.setFont("times", "normal");
     space();
 
@@ -544,19 +540,11 @@
         defFirst +
         " for " +
         yearsVal +
-        " years.",
-    );
-    space();
-    wrapped(
-      "I am aware that " +
+        " years. I am aware that " +
         defFirst +
         " is currently before the court in relation to the above named charge, " +
         s.caseNumber.trim() +
-        ".",
-    );
-    space();
-    wrapped(
-      "I am writing this letter voluntarily to express my support and to share my personal perspective on " +
+        ". I am writing this letter voluntarily to express my support and to share my personal perspective on " +
         defFirst +
         "'s character.",
     );
