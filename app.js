@@ -307,7 +307,7 @@
       " years. " +
       "I am aware that " +
       defFirst +
-      " is currently before the court in relation to the above named charge, case number " +
+      " is currently before the court in relation to the above named charge case number " +
       caseNo +
       ", " +
       "and I am writing this letter voluntarily to express my support and to share my personal perspective on " +
