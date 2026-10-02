@@ -28,14 +28,24 @@
 
   // ---------- state ----------
   const state = {
-    name: "", address: "", phone: "", email: "", date: "",
-    relationship: "", defendant: "", court: "", charge: "", caseNumber: "",
-    profession: "", yearsKnown: "",
-    opening: "", openingTouched: false,
+    name: "",
+    address: "",
+    phone: "",
+    email: "",
+    date: "",
+    relationship: "",
+    defendant: "",
+    court: "",
+    charge: "",
+    caseNumber: "",
+    profession: "",
+    yearsKnown: "",
+    opening: "",
+    openingTouched: false,
     paragraphs: [""],
     sigMode: "draw",
     typedSig: "",
-    hasDrawing: false
+    hasDrawing: false,
   };
 
   const todayISO = new Date().toISOString().slice(0, 10);
@@ -43,8 +53,20 @@
   state.date = todayISO;
 
   // ---------- simple field bindings ----------
-  const simpleFields = ["name", "address", "phone", "email", "date", "relationship", "defendant", "court", "charge", "profession", "yearsKnown"];
-  simpleFields.forEach(key => {
+  const simpleFields = [
+    "name",
+    "address",
+    "phone",
+    "email",
+    "date",
+    "relationship",
+    "defendant",
+    "court",
+    "charge",
+    "profession",
+    "yearsKnown",
+  ];
+  simpleFields.forEach((key) => {
     const el = document.getElementById("f-" + key);
     el.addEventListener("input", () => {
       state[key] = el.value;
@@ -73,9 +95,10 @@
 
       const ta = document.createElement("textarea");
       ta.value = val;
-      ta.placeholder = i === 0
-        ? "How long have you known the defendant, and in what context?"
-        : "Add another point — specific examples carry the most weight.";
+      ta.placeholder =
+        i === 0
+          ? "Describe the defendants character from your perspective"
+          : "Add another point — specific examples carry the most weight.";
       ta.addEventListener("input", () => {
         state.paragraphs[i] = ta.value;
         renderPreview();
@@ -115,7 +138,9 @@
   // ---------- signature: draw ----------
   const canvas = document.getElementById("sigCanvas");
   const ctx = canvas.getContext("2d");
-  let drawing = false, lastX = 0, lastY = 0;
+  let drawing = false,
+    lastX = 0,
+    lastY = 0;
 
   function fitCanvas() {
     const rect = canvas.getBoundingClientRect();
@@ -142,25 +167,27 @@
     const rect = canvas.getBoundingClientRect();
     return { x: e.clientX - rect.left, y: e.clientY - rect.top };
   }
-  canvas.addEventListener("pointerdown", e => {
+  canvas.addEventListener("pointerdown", (e) => {
     drawing = true;
     canvas.setPointerCapture(e.pointerId);
     const p = pointerPos(e);
-    lastX = p.x; lastY = p.y;
+    lastX = p.x;
+    lastY = p.y;
     ctx.beginPath();
     ctx.moveTo(p.x, p.y);
     ctx.lineTo(p.x + 0.1, p.y + 0.1);
     ctx.stroke();
     state.hasDrawing = true;
   });
-  canvas.addEventListener("pointermove", e => {
+  canvas.addEventListener("pointermove", (e) => {
     if (!drawing) return;
     const p = pointerPos(e);
     ctx.beginPath();
     ctx.moveTo(lastX, lastY);
     ctx.lineTo(p.x, p.y);
     ctx.stroke();
-    lastX = p.x; lastY = p.y;
+    lastX = p.x;
+    lastY = p.y;
   });
   function endStroke() {
     if (!drawing) return;
@@ -189,13 +216,19 @@
   });
 
   // ---------- signature tabs ----------
-  document.querySelectorAll(".sig-tab").forEach(tab => {
+  document.querySelectorAll(".sig-tab").forEach((tab) => {
     tab.addEventListener("click", () => {
-      document.querySelectorAll(".sig-tab").forEach(t => t.classList.remove("active"));
-      document.querySelectorAll(".sig-pane").forEach(p => p.classList.remove("active"));
+      document
+        .querySelectorAll(".sig-tab")
+        .forEach((t) => t.classList.remove("active"));
+      document
+        .querySelectorAll(".sig-pane")
+        .forEach((p) => p.classList.remove("active"));
       tab.classList.add("active");
       state.sigMode = tab.dataset.mode;
-      document.querySelector('.sig-pane[data-pane="' + state.sigMode + '"]').classList.add("active");
+      document
+        .querySelector('.sig-pane[data-pane="' + state.sigMode + '"]')
+        .classList.add("active");
       renderPreview();
       validate();
     });
@@ -203,18 +236,32 @@
 
   // ---------- helpers ----------
   function esc(str) {
-    return (str || "").replace(/[&<>"']/g, c => ({
-      "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;"
-    }[c]));
+    return (str || "").replace(
+      /[&<>"']/g,
+      (c) =>
+        ({
+          "&": "&amp;",
+          "<": "&lt;",
+          ">": "&gt;",
+          '"': "&quot;",
+          "'": "&#39;",
+        })[c],
+    );
   }
   function formatDateLong(iso) {
     if (!iso) return "";
     const d = new Date(iso + "T00:00:00");
     if (isNaN(d.getTime())) return iso;
-    return d.toLocaleDateString("en-GB", { day: "numeric", month: "long", year: "numeric" });
+    return d.toLocaleDateString("en-GB", {
+      day: "numeric",
+      month: "long",
+      year: "numeric",
+    });
   }
   function placeholderOr(val, ph) {
-    return val && val.trim() ? esc(val) : '<span class="placeholder">' + esc(ph) + "</span>";
+    return val && val.trim()
+      ? esc(val)
+      : '<span class="placeholder">' + esc(ph) + "</span>";
   }
   function firstName(full) {
     return (full || "").trim().split(/\s+/)[0] || "";
@@ -224,6 +271,10 @@
   // Pre-filled from the details entered elsewhere in the form, but it's a
   // normal editable textarea — not baked-in fixed text — so the person
   // signing the letter can (and should) rewrite it in their own words.
+  // Deliberately generated as a single flowing paragraph rather than
+  // several short ones, to leave more of the page free for the person's
+  // own reference points — Crown Court references are generally best
+  // kept to one page.
   // It re-generates automatically as the details above change, but only
   // until the person edits it directly; after that it's left alone unless
   // they click "Regenerate".
@@ -239,11 +290,30 @@
     const years = String(state.yearsKnown || "").trim() || "[number of]";
     const caseNo = state.caseNumber.trim() || "[case number]";
 
-    const p1 = "My name is " + refFirst + ", I am a " + profession + " and " + defFull + "'s " + relationship + ". I have known " + defFirst + " for " + years + " years.";
-    const p2 = "I am aware that " + defFirst + " is currently before the court in relation to the above named charge, " + caseNo + ".";
-    const p3 = "I am writing this letter voluntarily to express my support and to share my personal perspective on " + defFirst + "'s character.";
-
-    return p1 + "\n\n" + p2 + "\n\n" + p3;
+    return (
+      "My name is " +
+      refFirst +
+      ", I am a " +
+      profession +
+      " and " +
+      defFull +
+      "'s " +
+      relationship +
+      ". " +
+      "I have known " +
+      defFirst +
+      " for " +
+      years +
+      " years. " +
+      "I am aware that " +
+      defFirst +
+      " is currently before the court in relation to the above named charge, " +
+      caseNo +
+      ", " +
+      "and I am writing this letter voluntarily to express my support and to share my personal perspective on " +
+      defFirst +
+      "'s character."
+    );
   }
 
   function syncOpeningIfNeeded() {
@@ -277,9 +347,11 @@
     let html = "";
 
     html += `<div class="block">${placeholderOr(s.name, "Your name")}</div>`;
-    const addrLines = (s.address || "").split("\n").filter(l => l.trim());
+    const addrLines = (s.address || "").split("\n").filter((l) => l.trim());
     if (addrLines.length) {
-      addrLines.forEach(l => { html += `<div class="block">${esc(l)}</div>`; });
+      addrLines.forEach((l) => {
+        html += `<div class="block">${esc(l)}</div>`;
+      });
     } else {
       html += `<div class="block"><span class="placeholder">Your address</span></div>`;
     }
@@ -306,9 +378,9 @@
       html += `<div class="body-para placeholder">Your opening paragraph will appear here.</div>`;
     }
 
-    const nonEmptyParas = s.paragraphs.filter(p => p.trim());
+    const nonEmptyParas = s.paragraphs.filter((p) => p.trim());
     if (nonEmptyParas.length) {
-      nonEmptyParas.forEach(p => {
+      nonEmptyParas.forEach((p) => {
         html += `<div class="body-para">${esc(p.trim())}</div>`;
       });
     } else {
@@ -335,7 +407,19 @@
   renderPreview();
 
   // ---------- validation ----------
-  const requiredFields = ["name", "address", "date", "relationship", "defendant", "court", "charge", "caseNumber", "profession", "yearsKnown", "opening"];
+  const requiredFields = [
+    "name",
+    "address",
+    "date",
+    "relationship",
+    "defendant",
+    "court",
+    "charge",
+    "caseNumber",
+    "profession",
+    "yearsKnown",
+    "opening",
+  ];
   const genStatus = document.getElementById("genStatus");
   const pdfBtn = document.getElementById("downloadPdfBtn");
   const wordBtn = document.getElementById("downloadWordBtn");
@@ -346,15 +430,16 @@
 
   function validate() {
     let missing = [];
-    requiredFields.forEach(key => {
+    requiredFields.forEach((key) => {
       const empty = !fieldValue(key) || !fieldValue(key).trim();
       if (empty) missing.push(key);
     });
 
-    const hasParagraph = state.paragraphs.some(p => p.trim());
+    const hasParagraph = state.paragraphs.some((p) => p.trim());
     if (!hasParagraph) missing.push("at least one reference paragraph");
 
-    const hasSignature = state.sigMode === "draw" ? state.hasDrawing : !!state.typedSig.trim();
+    const hasSignature =
+      state.sigMode === "draw" ? state.hasDrawing : !!state.typedSig.trim();
     if (!hasSignature) missing.push("signature");
 
     if (missing.length === 0) {
@@ -372,14 +457,20 @@
   }
 
   const fieldLabels = {
-    name: "your name", address: "your address", date: "the date",
-    relationship: "your relationship to the defendant", defendant: "the defendant's name",
-    court: "the name of the court", charge: "the charge", caseNumber: "the case number",
-    profession: "your profession", yearsKnown: "how many years you've known the defendant",
-    opening: "the opening paragraph"
+    name: "your name",
+    address: "your address",
+    date: "the date",
+    relationship: "your relationship to the defendant",
+    defendant: "the defendant's name",
+    court: "the name of the court",
+    charge: "the charge",
+    caseNumber: "the case number",
+    profession: "your profession",
+    yearsKnown: "how many years you've known the defendant",
+    opening: "the opening paragraph",
   };
   function humanList(keys) {
-    const labels = keys.map(k => fieldLabels[k] || k);
+    const labels = keys.map((k) => fieldLabels[k] || k);
     if (labels.length === 1) return labels[0];
     return labels.slice(0, -1).join(", ") + " and " + labels[labels.length - 1];
   }
@@ -388,11 +479,15 @@
 
   // ---------- signature image for PDF ----------
   function getSignatureImage() {
-    return new Promise(resolve => {
+    return new Promise((resolve) => {
       if (state.sigMode === "draw") {
         if (!state.hasDrawing) return resolve(null);
         const rect = canvas.getBoundingClientRect();
-        resolve({ dataUrl: canvas.toDataURL("image/png"), w: rect.width, h: rect.height });
+        resolve({
+          dataUrl: canvas.toDataURL("image/png"),
+          w: rect.width,
+          h: rect.height,
+        });
         return;
       }
       // typed mode: render to an offscreen canvas using the cursive font
@@ -404,14 +499,19 @@
         const octx = off.getContext("2d");
         octx.font = fontSize + "px 'Dancing Script'";
         const metrics = octx.measureText(text);
-        const padX = 20, padY = 20;
+        const padX = 20,
+          padY = 20;
         off.width = Math.ceil(metrics.width + padX * 2);
         off.height = Math.ceil(fontSize * 1.5 + padY);
         octx.font = fontSize + "px 'Dancing Script'";
         octx.fillStyle = "#1E2621";
         octx.textBaseline = "middle";
         octx.fillText(text, padX, off.height / 2);
-        resolve({ dataUrl: off.toDataURL("image/png"), w: off.width, h: off.height });
+        resolve({
+          dataUrl: off.toDataURL("image/png"),
+          w: off.width,
+          h: off.height,
+        });
       };
       if (document.fonts && document.fonts.load) {
         document.fonts.load("48px 'Dancing Script'").then(draw).catch(draw);
@@ -427,8 +527,12 @@
   async function buildPdfBlob() {
     const { jsPDF } = window.jspdf;
     const doc = new jsPDF({ unit: "mm", format: "a4" });
-    const marginLeft = 25, marginRight = 25, marginTop = 25, marginBottom = 25;
-    const pageWidth = 210, pageHeight = 297;
+    const marginLeft = 25,
+      marginRight = 25,
+      marginTop = 25,
+      marginBottom = 25;
+    const pageWidth = 210,
+      pageHeight = 297;
     const usableWidth = pageWidth - marginLeft - marginRight;
     const lineHeight = 6;
     let y = marginTop;
@@ -453,20 +557,22 @@
     }
     function wrapped(text) {
       const lines = doc.splitTextToSize(text, usableWidth);
-      lines.forEach(l => {
+      lines.forEach((l) => {
         checkPage(lineHeight);
         doc.text(l, marginLeft, y);
         y += lineHeight;
       });
     }
     function space(mm) {
-      y += (mm === undefined ? lineHeight : mm);
+      y += mm === undefined ? lineHeight : mm;
       checkPage(0);
     }
 
     const s = state;
     line(s.name.trim());
-    (s.address || "").split("\n").forEach(l => { if (l.trim()) line(l.trim()); });
+    (s.address || "").split("\n").forEach((l) => {
+      if (l.trim()) line(l.trim());
+    });
     if (s.phone.trim()) line(s.phone.trim());
     if (s.email.trim()) line(s.email.trim());
     space();
@@ -478,7 +584,12 @@
 
     doc.setFont("times", "bold");
     wrapped("Re: Character reference for " + s.defendant.trim());
-    wrapped("Case No: " + s.caseNumber.trim() + "\u00A0\u00A0Charge: " + s.charge.trim());
+    wrapped(
+      "Case No: " +
+        s.caseNumber.trim() +
+        "\u00A0\u00A0Charge: " +
+        s.charge.trim(),
+    );
     doc.setFont("times", "normal");
     space();
 
@@ -486,16 +597,19 @@
     space();
 
     if (s.opening.trim()) {
-      s.opening.trim().split(/\n{2,}/).forEach(part => {
-        const cleaned = part.trim().replace(/\s*\n\s*/g, " ");
-        if (cleaned) {
-          wrapped(cleaned);
-          space();
-        }
-      });
+      s.opening
+        .trim()
+        .split(/\n{2,}/)
+        .forEach((part) => {
+          const cleaned = part.trim().replace(/\s*\n\s*/g, " ");
+          if (cleaned) {
+            wrapped(cleaned);
+            space();
+          }
+        });
     }
 
-    s.paragraphs.forEach(p => {
+    s.paragraphs.forEach((p) => {
       if (p.trim()) {
         wrapped(p.trim());
         space();
@@ -508,9 +622,19 @@
     const sig = await getSignatureImage();
     if (sig) {
       const targetWidthMm = 50;
-      const targetHeightMm = Math.max(10, targetWidthMm * (sig.h / sig.w) * 0.55);
+      const targetHeightMm = Math.max(
+        10,
+        targetWidthMm * (sig.h / sig.w) * 0.55,
+      );
       checkPage(targetHeightMm + 2);
-      doc.addImage(sig.dataUrl, "PNG", marginLeft, y - 4, targetWidthMm, targetHeightMm);
+      doc.addImage(
+        sig.dataUrl,
+        "PNG",
+        marginLeft,
+        y - 4,
+        targetWidthMm,
+        targetHeightMm,
+      );
       y += targetHeightMm + 4;
     }
 
@@ -544,7 +668,9 @@
     }
 
     p(s.name.trim());
-    (s.address || "").split("\n").forEach(l => { if (l.trim()) p(l.trim()); });
+    (s.address || "").split("\n").forEach((l) => {
+      if (l.trim()) p(l.trim());
+    });
     if (s.phone.trim()) p(s.phone.trim());
     if (s.email.trim()) p(s.email.trim());
     spacer();
@@ -554,19 +680,28 @@
     p(s.court.trim());
     spacer();
     p("Re: Character reference for " + s.defendant.trim(), "font-weight:bold;");
-    p("Case No: " + s.caseNumber.trim() + "\u00A0\u00A0Charge: " + s.charge.trim(), "font-weight:bold;");
+    p(
+      "Case No: " +
+        s.caseNumber.trim() +
+        "\u00A0\u00A0Charge: " +
+        s.charge.trim(),
+      "font-weight:bold;",
+    );
     spacer();
     p("Your Honour,");
     spacer();
 
     if (s.opening.trim()) {
-      s.opening.trim().split(/\n{2,}/).forEach(part => {
-        const cleaned = part.trim().replace(/\s*\n\s*/g, " ");
-        if (cleaned) paragraphBlock(cleaned);
-      });
+      s.opening
+        .trim()
+        .split(/\n{2,}/)
+        .forEach((part) => {
+          const cleaned = part.trim().replace(/\s*\n\s*/g, " ");
+          if (cleaned) paragraphBlock(cleaned);
+        });
     }
 
-    s.paragraphs.forEach(para => {
+    s.paragraphs.forEach((para) => {
       if (para.trim()) paragraphBlock(para.trim());
     });
 
@@ -575,7 +710,9 @@
 
     const sig = await getSignatureImage();
     if (sig) {
-      parts.push(`<p style="margin:4pt 0 2pt 0;"><img src="${sig.dataUrl}" style="width:150px;" alt="Signature"></p>`);
+      parts.push(
+        `<p style="margin:4pt 0 2pt 0;"><img src="${sig.dataUrl}" style="width:150px;" alt="Signature"></p>`,
+      );
     } else {
       spacer();
     }
@@ -614,7 +751,8 @@
     pdfBtn.disabled = true;
     wordBtn.disabled = true;
     const originalLabel = button.textContent;
-    button.textContent = format === "pdf" ? "Preparing PDF…" : "Preparing Word…";
+    button.textContent =
+      format === "pdf" ? "Preparing PDF…" : "Preparing Word…";
 
     try {
       const defendantName = state.defendant.trim() || "defendant";
@@ -630,7 +768,8 @@
       genStatus.textContent = "Downloading…";
     } catch (err) {
       console.error(err);
-      genStatus.textContent = "Something went wrong generating the file. Please try again.";
+      genStatus.textContent =
+        "Something went wrong generating the file. Please try again.";
       genStatus.classList.add("warn");
     } finally {
       button.textContent = originalLabel;
@@ -640,5 +779,4 @@
 
   pdfBtn.addEventListener("click", () => handleDownload("pdf", pdfBtn));
   wordBtn.addEventListener("click", () => handleDownload("word", wordBtn));
-
 })();
