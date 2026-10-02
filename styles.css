@@ -253,7 +253,27 @@ button.primary.secondary-btn:not(:disabled):hover { filter: none; background: va
 .paper-wrap .re-line { font-weight: 600; margin: 4px 0 2px; }
 .paper-wrap .re-line-sub { font-weight: 600; margin: 0 0 18px; }
 .paper-wrap .body-para { margin: 0 0 16px; white-space: pre-wrap; }
-.paper-wrap .sig-img { display: block; max-width: 190px; max-height: 70px; margin: 4px 0 10px; }
-.paper-wrap .typed-sig-preview { font-family: 'Dancing Script', cursive; font-size: 1.9rem; margin: 4px 0 6px; color: #262019; }
+.paper-wrap .sig-img { display: inline-block; max-height: 70px; vertical-align: middle; margin: 0 4px; }
+.paper-wrap .typed-sig-preview { font-family: 'Dancing Script', cursive; color: #262019; }
 .paper-wrap .placeholder { color: #A79E8C; font-style: italic; }
+
+/* Statement-of-witness specific elements */
+.paper-wrap .stmt-caption { font-weight: 700; text-align: center; margin: 0 0 2px; }
+.paper-wrap .stmt-caption-sub { text-align: center; color: #6B6357; font-size: 0.88em; margin: 0 0 20px; }
+.paper-wrap .stmt-title { font-weight: 700; text-align: center; font-size: 1.15em; letter-spacing: 0.02em; margin: 0 0 4px; }
+.paper-wrap .stmt-statute { text-align: center; font-style: italic; font-size: 0.78em; color: #6B6357; margin: 0 0 4px; }
+.paper-wrap .stmt-sig-row {
+  display: flex; align-items: center; justify-content: space-between;
+  flex-wrap: wrap; gap: 10px 24px; margin: 4px 0 2px;
+}
+.paper-wrap .stmt-footer-preview {
+  margin-top: 40px; padding-top: 10px; border-top: 1px solid var(--paper-line, #E4DDC8);
+}
+.paper-wrap .stmt-footer-row {
+  display: flex; align-items: center; justify-content: space-between;
+  font-size: 0.82em; gap: 10px 24px;
+}
+.paper-wrap .stmt-footer-note {
+  font-size: 0.74em; color: #9C917F; font-style: italic; margin: 6px 0 0;
+}
 .preview-label { font-size: 0.78rem; color: var(--muted); margin: 0 0 10px; font-weight: 500; }
