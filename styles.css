@@ -250,7 +250,8 @@ button.primary.secondary-btn:not(:disabled):hover { filter: none; background: va
 }
 .paper-wrap .block { margin: 0 0 4px; white-space: pre-wrap; }
 .paper-wrap .spacer { height: 18px; }
-.paper-wrap .re-line { font-weight: 600; margin: 4px 0 18px; }
+.paper-wrap .re-line { font-weight: 600; margin: 4px 0 2px; }
+.paper-wrap .re-line-sub { font-weight: 600; margin: 0 0 18px; }
 .paper-wrap .body-para { margin: 0 0 16px; white-space: pre-wrap; }
 .paper-wrap .sig-img { display: block; max-width: 190px; max-height: 70px; margin: 4px 0 10px; }
 .paper-wrap .typed-sig-preview { font-family: 'Dancing Script', cursive; font-size: 1.9rem; margin: 4px 0 6px; color: #262019; }

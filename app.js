@@ -294,7 +294,8 @@
     html += `<div class="block">${placeholderOr(s.court, "Name of court")}</div>`;
 
     html += `<div class="spacer"></div>`;
-    html += `<div class="re-line">Re: Character Reference for ${placeholderOr(s.defendant, "defendant's name")} – Charge: ${placeholderOr(s.charge, "charge")} – Case No: ${placeholderOr(s.caseNumber, "case number")}</div>`;
+    html += `<div class="re-line">Re: Character reference for ${placeholderOr(s.defendant, "defendant's name")}</div>`;
+    html += `<div class="re-line-sub">Case No: ${placeholderOr(s.caseNumber, "case number")}\u00A0\u00A0Charge: ${placeholderOr(s.charge, "charge")}</div>`;
 
     html += `<div class="block">Your Honour,</div>`;
     html += `<div class="spacer"></div>`;
@@ -476,7 +477,8 @@
     space();
 
     doc.setFont("times", "bold");
-    wrapped("Re: Character Reference for " + s.defendant.trim() + " \u2013 Charge: " + s.charge.trim() + " \u2013 Case No: " + s.caseNumber.trim());
+    wrapped("Re: Character reference for " + s.defendant.trim());
+    wrapped("Case No: " + s.caseNumber.trim() + "\u00A0\u00A0Charge: " + s.charge.trim());
     doc.setFont("times", "normal");
     space();
 
@@ -551,10 +553,8 @@
     p("The Presiding Judge");
     p(s.court.trim());
     spacer();
-    p(
-      "Re: Character Reference for " + s.defendant.trim() + " \u2013 Charge: " + s.charge.trim() + " \u2013 Case No: " + s.caseNumber.trim(),
-      "font-weight:bold;"
-    );
+    p("Re: Character reference for " + s.defendant.trim(), "font-weight:bold;");
+    p("Case No: " + s.caseNumber.trim() + "\u00A0\u00A0Charge: " + s.charge.trim(), "font-weight:bold;");
     spacer();
     p("Your Honour,");
     spacer();
