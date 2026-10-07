@@ -40,6 +40,7 @@
     caseNumber: "",
     profession: "",
     yearsKnown: "",
+    age: "",
     opening: "",
     openingTouched: false,
     paragraphs: [""],
@@ -65,6 +66,7 @@
     "charge",
     "profession",
     "yearsKnown",
+    "age",
   ];
   simpleFields.forEach((key) => {
     const el = document.getElementById("f-" + key);
@@ -287,7 +289,8 @@
     const defFull = state.defendant.trim() || "[defendant's name]";
     const profession = state.profession.trim() || "[profession]";
     const relationship = state.relationship.trim() || "[relationship]";
-    const years = String(state.yearsKnown || "").trim() || "[number of]";
+    const years =
+      state.yearsKnown.trim() || "[length of time, e.g. over 10 years]";
     const caseNo = state.caseNumber.trim() || "[case number]";
 
     return (
@@ -304,7 +307,7 @@
       defFirst +
       " for " +
       years +
-      " years. " +
+      ". " +
       "I am aware that " +
       defFirst +
       " is currently before the court in relation to the above named charge, " +
@@ -385,7 +388,7 @@
       html += `<div class="block">${bits.join("&nbsp;&nbsp;&nbsp;&nbsp;")}</div>`;
     }
     html += `<div class="block">Occupation: ${placeholderOr(s.profession, "profession")}</div>`;
-    html += `<div class="block">Age: Over 18</div>`;
+    html += `<div class="block">Age: ${placeholderOr(s.age, "your age")}</div>`;
     html += `<div class="spacer"></div>`;
 
     // --- declaration of truth ---
@@ -439,6 +442,7 @@
     "caseNumber",
     "profession",
     "yearsKnown",
+    "age",
     "opening",
   ];
   const genStatus = document.getElementById("genStatus");
@@ -484,7 +488,8 @@
     charge: "the charge",
     caseNumber: "the case number",
     profession: "your profession",
-    yearsKnown: "how many years you've known the defendant",
+    yearsKnown: "how long you've known the defendant",
+    age: "your age",
     opening: "the opening paragraph",
   };
   function humanList(keys) {
@@ -652,7 +657,7 @@
       line(bits.join("    "));
     }
     line("Occupation: " + s.profession.trim());
-    line("Age: Over 18");
+    line("Age: " + s.age.trim());
     space(6);
 
     // --- declaration of truth ---
